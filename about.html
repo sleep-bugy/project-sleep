@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Project Sleep</title>
+    <meta name="description" content="Learn about Project Sleep team, mission, and the developers behind the advanced custom ROMs.">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Core Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                        'mono': ['JetBrains Mono', 'monospace']
+                    },
+                    colors: {
+                        'navy': '#0B1426',
+                        'electric': '#00D4FF',
+                        'cyan': '#4DFFFF',
+                        'slate': '#1A2332',
+                        'glass': 'rgba(0, 212, 255, 0.1)',
+                        'glass-navy': 'rgba(11, 20, 38, 0.2)'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        .glass {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .glass-dark {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            background: rgba(11, 20, 38, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #00D4FF 0%, #4DFFFF 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hover-lift {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.2);
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #00D4FF, #4DFFFF);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .timeline {
+            position: relative;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #00D4FF, #4DFFFF);
+            transform: translateX(-50%);
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 1rem;
+            width: 12px;
+            height: 12px;
+            background: #00D4FF;
+            border-radius: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+        }
+        
+        .timeline-content {
+            width: 45%;
+            padding: 1.5rem;
+            background: rgba(11, 20, 38, 0.2);
+            border-radius: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .timeline-item:nth-child(odd) .timeline-content {
+            margin-left: auto;
+        }
+        
+        .timeline-item:nth-child(even) .timeline-content {
+            margin-right: auto;
+        }
+        
+        [data-theme="light"] {
+            --bg-primary: #f8fafc;
+            --bg-secondary: #f1f5f9;
+            --text-primary: #334155;
+            --text-secondary: #64748b;
+            --glass-bg: rgba(255, 255, 255, 0.9);
+            --glass-border: rgba(0, 0, 0, 0.05);
+        }
+        
+        [data-theme="dark"] {
+            --bg-primary: #0B1426;
+            --bg-secondary: #1A2332;
+            --text-primary: #ffffff;
+            --text-secondary: #cbd5e1;
+            --glass-bg: rgba(0, 212, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+        
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="font-inter">
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 glass-dark">
+        <div class="max-w-6xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-electric to-cyan flex items-center justify-center">
+                        <span class="text-white font-bold text-lg">S</span>
+                    </div>
+                    <span class="text-xl font-bold gradient-text">Project Sleep</span>
+                </div>
+                
+                <!-- Navigation Links -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="nav-link text-sm font-medium hover:text-electric">Home</a>
+                    <a href="features.html" class="nav-link text-sm font-medium hover:text-electric">Features</a>
+                    <a href="download.html" class="nav-link text-sm font-medium hover:text-electric">Download</a>
+                    <a href="index.html#community" class="nav-link text-sm font-medium hover:text-electric">Community</a>
+                    <a href="about.html" class="nav-link text-sm font-medium text-electric">About</a>
+                </div>
+                
+                <!-- Right Side Controls -->
+                <div class="flex items-center space-x-4">
+                    <!-- Theme Toggle -->
+                    <button class="w-10 h-10 rounded-lg glass hover:glass-light flex items-center justify-center" id="themeToggle">
+                        <span class="text-sm" id="themeIcon">🌙</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section class="pt-32 pb-20 px-6">
+        <div class="max-w-6xl mx-auto text-center">
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 gradient-text">
+                About Project Sleep
+            </h1>
+            <p class="text-xl text-gray-400 max-w-3xl mx-auto">
+                We're a passionate team of developers dedicated to creating the ultimate Android experience through innovative custom ROMs and modifications.
+            </p>
+        </div>
+    </section>
+    
+    <!-- Mission Statement -->
+    <section class="py-20 px-6">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-4xl font-bold mb-6 gradient-text">Our Mission</h2>
+                    <p class="text-lg text-gray-300 mb-6">
+                        Project Sleep was born from a simple idea: Android should be beautiful, fast, and customizable. 
+                        We believe that everyone deserves a premium mobile experience without the limitations of stock firmware.
+                    </p>
+                    <p class="text-lg text-gray-300 mb-6">
+                        Our team combines years of Android development experience with cutting-edge technology to deliver 
+                        ROMs that push the boundaries of what's possible on mobile devices.
+                    </p>
+                    <div class="space-y-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-2 h-2 bg-electric rounded-full"></div>
+                            <span class="text-gray-300">Performance First</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="w-2 h-2 bg-electric rounded-full"></div>
+                            <span class="text-gray-300">User-Centric Design</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="w-2 h-2 bg-electric rounded-full"></div>
+                            <span class="text-gray-300">Open Source Philosophy</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="w-2 h-2 bg-electric rounded-full"></div>
+                            <span class="text-gray-300">Community Driven</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="relative">
+                    <div class="glass-dark rounded-2xl p-8 hover-lift">
+                        <img src="resources/circuit-bg.jpg" alt="Technology Background" class="w-full rounded-lg">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Team Section -->
+    <section class="py-20 px-6 bg-gradient-to-r from-navy to-slate">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold mb-4 gradient-text">Meet the Team</h2>
+                <p class="text-xl text-gray-400">
+                    The passionate developers behind Project Sleep
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Team Member 1 -->
+                <div class="glass-dark rounded-xl p-6 text-center hover-lift">
+                    <div class="w-24 h-24 bg-gradient-to-br from-electric to-cyan rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-white text-2xl font-bold">AK</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Alex Kim</h3>
+                    <p class="text-electric mb-3">Lead Developer</p>
+                    <p class="text-gray-400 text-sm mb-4">
+                        Android kernel expert with 8+ years of experience in system optimization and performance tuning.
+                    </p>
+                    <div class="flex justify-center space-x-3">
+                        <button class="w-8 h-8 glass rounded-full flex items-center justify-center hover:glass-light" onclick="showComingSoon()">
+                            <span class="text-sm">💻</span>
+                        </button>
+                        <button class="w-8 h-8 glass rounded-full flex items-center justify-center hover:glass-light" onclick="showComingSoon()">
+                            <span class="text-sm">🐦</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Team Member 2 -->
+                <div class="glass-dark rounded-xl p-6 text-center hover-lift">
+                    <div class="w-24 h-24 bg-gradient-to-br from-electric to-cyan rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-white text-2xl font-bold">SP</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Sarah Park</h3>
+                    <p class="text-electric mb-3">UI/UX Designer</p>
+                    <p class="text-gray-400 text-sm mb-4">
+                        Creative designer specializing in glassmorphism and modern Android interface design.
+                    </p>
+                    <div class="flex justify-center space-x-3">
+                        <button class="w-8 h-8 glass rounded-full flex items-center justify-center hover:glass-light" onclick="showComingSoon()">
+                            <span class="text-sm">🎨</span>
+                        </button>
+                        <button class="w-8 h-8 glass rounded-full flex items-center justify-center hover:glass-light" onclick="showComingSoon()">
+                            <span class="text-sm">🐦</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Team Member 3 -->
+                <div class="glass-dark rounded-xl p-6 text-center hover-lift">
+                    <div class="w-24 h-24 bg-gradient-to-br from-electric to-cyan rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-white text-2xl font-bold">MR</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Mike Rodriguez</h3>
+                    <p class="text-electric mb-3">ROM Maintainer</p>
+                    <p class="text-gray-400 text-sm mb-4">
+                        Device maintainer and build engineer ensuring stability across 150+ supported devices.
+                    </p>
+                    <div class="flex justify-center space-x-3">
+                        <button class="w-8 h-8 glass rounded-full flex items-center justify-center hover:glass-light" onclick="showComingSoon()">
+                            <span class="text-sm">🔧</span>
+                        </button>
+                        <button class="w-8 h-8 glass rounded-full flex items-center justify-center hover:glass-light" onclick="showComingSoon()">
+                            <span class="text-sm">🐦</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Team Member 4 -->
+                <div class="glass-dark rounded-xl p-6 text-center hover-lift">
+                    <div class="w-24 h-24 bg-gradient-to-br from-electric to-cyan rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-white text-2xl font-bold">LM</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Lisa Mitchell</h3>
+                    <p class="text-electric mb-3">Community Manager</p>
+                    <p class="text-gray-400 text-sm mb-4">
+                        Community leader managing support, documentation, and user engagement across all platforms.
+                    </p>
+                    <div class="flex justify-center space-x-3">
+                        <button class="w-8 h-8 glass rounded-full flex items-center justify-center hover:glass-light" onclick="showComingSoon()">
+                            <span class="text-sm">💬</span>
+                        </button>
+                        <button class="w-8 h-8 glass rounded-full flex items-center justify-center hover:glass-light" onclick="showComingSoon()">
+                            <span class="text-sm">🐦</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Team Member 5 -->
+                <div class="glass-dark rounded-xl p-6 text-center hover-lift">
+                    <div class="w-24 h-24 bg-gradient-to-br from-electric to-cyan rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-white text-2xl font-bold">JC</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">James Chen</h3>
+                    <p class="text-electric mb-3">Security Researcher</p>
+                    <p class="text-gray-400 text-sm mb-4">
+                        Cybersecurity expert ensuring our ROMs meet the highest security standards and privacy protection.
+                    </p>
+                    <div class="flex justify-center space-x-3">
+                        <button class="w-8 h-8 glass rounded-full flex items-center justify-center hover:glass-light" onclick="showComingSoon()">
+                            <span class="text-sm">🔒</span>
+                        </button>
+                        <button class="w-8 h-8 glass rounded-full flex items-center justify-center hover:glass-light" onclick="showComingSoon()">
+                            <span class="text-sm">🐦</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Team Member 6 -->
+                <div class="glass-dark rounded-xl p-6 text-center hover-lift">
+                    <div class="w-24 h-24 bg-gradient-to-br from-electric to-cyan rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-white text-2xl font-bold">ES</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Emma Singh</h3>
+                    <p class="text-electric mb-3">QA Engineer</p>
+                    <p class="text-gray-400 text-sm mb-4">
+                        Quality assurance specialist ensuring every release meets our high standards for stability and performance.
+                    </p>
+                    <div class="flex justify-center space-x-3">
+                        <button class="w-8 h-8 glass rounded-full flex items-center justify-center hover:glass-light" onclick="showComingSoon()">
+                            <span class="text-sm">✅</span>
+                        </button>
+                        <button class="w-8 h-8 glass rounded-full flex items-center justify-center hover:glass-light" onclick="showComingSoon()">
+                            <span class="text-sm">🐦</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Development Timeline -->
+    <section class="py-20 px-6">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold mb-4 gradient-text">Development Timeline</h2>
+                <p class="text-xl text-gray-400">
+                    Key milestones in Project Sleep's journey
+                </p>
+            </div>
+            
+            <div class="timeline max-w-4xl mx-auto">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3 class="text-xl font-semibold mb-2 gradient-text">Project Inception</h3>
+                        <p class="text-gray-400 mb-2">January 2023</p>
+                        <p class="text-sm">
+                            Project Sleep was founded with the vision of creating the ultimate Android custom ROM, 
+                            combining performance, beauty, and customization.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3 class="text-xl font-semibold mb-2 gradient-text">First Alpha Release</h3>
+                        <p class="text-gray-400 mb-2">March 2023</p>
+                        <p class="text-sm">
+                            Released the first alpha version of SleepOS with basic features and optimizations for 5 flagship devices.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3 class="text-xl font-semibold mb-2 gradient-text">Community Launch</h3>
+                        <p class="text-gray-400 mb-2">June 2023</p>
+                        <p class="text-sm">
+                            Launched our Discord server and community forums, reaching 1,000 active users within the first month.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3 class="text-xl font-semibold mb-2 gradient-text">SleepOS 2.0 Release</h3>
+                        <p class="text-gray-400 mb-2">September 2023</p>
+                        <p class="text-sm">
+                            Major update introducing glassmorphism UI, advanced battery optimization, and support for 50+ devices.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3 class="text-xl font-semibold mb-2 gradient-text">100K Users Milestone</h3>
+                        <p class="text-gray-400 mb-2">December 2023</p>
+                        <p class="text-sm">
+                            Reached 100,000 active users across all supported devices and launched the HyperOS modification project.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3 class="text-xl font-semibold mb-2 gradient-text">Current Development</h3>
+                        <p class="text-gray-400 mb-2">2024</p>
+                        <p class="text-sm">
+                            Continuous development with Android 14 support, 150+ devices, and advanced AI-driven optimizations.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Statistics -->
+    <section class="py-20 px-6 bg-gradient-to-r from-navy to-slate">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold mb-4 gradient-text">Project Impact</h2>
+                <p class="text-xl text-gray-400">
+                    Numbers that speak for our success
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="glass-dark rounded-xl p-8 text-center hover-lift">
+                    <div class="text-4xl font-bold gradient-text mb-2 stats-counter" data-target="150000">0</div>
+                    <div class="text-gray-400">Active Users</div>
+                </div>
+                
+                <div class="glass-dark rounded-xl p-8 text-center hover-lift">
+                    <div class="text-4xl font-bold gradient-text mb-2 stats-counter" data-target="150">0</div>
+                    <div class="text-gray-400">Supported Devices</div>
+                </div>
+                
+                <div class="glass-dark rounded-xl p-8 text-center hover-lift">
+                    <div class="text-4xl font-bold gradient-text mb-2 stats-counter" data-target="25">0</div>
+                    <div class="text-gray-400">Team Members</div>
+                </div>
+                
+                <div class="glass-dark rounded-xl p-8 text-center hover-lift">
+                    <div class="text-4xl font-bold gradient-text mb-2 stats-counter" data-target="99">0</div>
+                    <div class="text-gray-400">Stability Score</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Call to Action -->
+    <section class="py-20 px-6">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-4xl font-bold mb-6 gradient-text">Join Our Journey</h2>
+            <p class="text-xl text-gray-400 mb-8">
+                Be part of the Project Sleep community and help shape the future of Android customization.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button class="px-8 py-4 bg-gradient-to-r from-electric to-cyan rounded-lg font-semibold text-white hover-lift" onclick="navigateTo('download.html')">
+                    Download SleepOS
+                </button>
+                <button class="px-8 py-4 glass-dark rounded-lg font-semibold text-white hover-lift" onclick="showComingSoon()">
+                    Join Our Team
+                </button>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="py-12 px-6 glass-dark">
+        <div class="max-w-6xl mx-auto text-center">
+            <div class="flex items-center justify-center space-x-3 mb-6">
+                <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-electric to-cyan flex items-center justify-center">
+                    <span class="text-white font-bold text-lg">S</span>
+                </div>
+                <span class="text-2xl font-bold gradient-text">Project Sleep</span>
+            </div>
+            
+            <p class="text-gray-400 mb-6">
+                Advanced custom ROM development for the future of Android.
+            </p>
+            
+            <div class="flex justify-center space-x-6 mb-6">
+                <a href="#" class="text-gray-400 hover:text-electric transition-colors">Privacy Policy</a>
+                <a href="#" class="text-gray-400 hover:text-electric transition-colors">Terms of Service</a>
+                <a href="#" class="text-gray-400 hover:text-electric transition-colors">Contact Us</a>
+            </div>
+            
+            <p class="text-sm text-gray-500">
+                © 2024 Project Sleep. All rights reserved.
+            </p>
+        </div>
+    </footer>
+    
+    <script>
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            setupThemeToggle();
+            setupCounters();
+            setupScrollAnimations();
+        });
+        
+        function setupThemeToggle() {
+            const themeToggle = document.getElementById('themeToggle');
+            const themeIcon = document.getElementById('themeIcon');
+            let currentTheme = localStorage.getItem('theme') || 'dark';
+            
+            function updateThemeIcon() {
+                themeIcon.textContent = currentTheme === 'dark' ? '☀️' : '🌙';
+            }
+            
+            updateThemeIcon();
+            
+            themeToggle.addEventListener('click', () => {
+                currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', currentTheme);
+                localStorage.setItem('theme', currentTheme);
+                updateThemeIcon();
+            });
+        }
+        
+        function setupCounters() {
+            const counters = document.querySelectorAll('.stats-counter');
+            
+            const animateCounter = (counter) => {
+                const target = parseInt(counter.getAttribute('data-target'));
+                const duration = 2000;
+                const increment = target / (duration / 16);
+                let current = 0;
+                
+                const updateCounter = () => {
+                    current += increment;
+                    if (current < target) {
+                        counter.textContent = Math.floor(current).toLocaleString();
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        counter.textContent = target.toLocaleString();
+                    }
+                };
+                
+                updateCounter();
+            };
+            
+            const counterObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animateCounter(entry.target);
+                        counterObserver.unobserve(entry.target);
+                    }
+                });
+            });
+            
+            counters.forEach(counter => {
+                counterObserver.observe(counter);
+            });
+        }
+        
+        function setupScrollAnimations() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+            
+            // Observe team member cards
+            document.querySelectorAll('.hover-lift').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
+            });
+        }
+        
+        function showComingSoon() {
+            alert('Coming soon! This feature is under development.');
+        }
+        
+        function navigateTo(url) {
+            window.location.href = url;
+        }
+    </script>
+</body>
+</html>

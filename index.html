@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Sleep - Custom ROM & HyperOS Mod</title>
+    <meta name="description" content="Advanced custom ROM development with SleepOS, AOSP builds, and HyperOS modifications. Join the future of Android customization.">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Core Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/7.3.2/pixi.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="https://unpkg.com/splitting@1.0.6/dist/splitting.min.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                        'mono': ['JetBrains Mono', 'monospace']
+                    },
+                    colors: {
+                        'navy': '#0B1426',
+                        'electric': '#00D4FF',
+                        'cyan': '#4DFFFF',
+                        'slate': '#1A2332',
+                        'glass': 'rgba(0, 212, 255, 0.1)',
+                        'glass-navy': 'rgba(11, 20, 38, 0.2)'
+                    },
+                    animation: {
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        @keyframes glow {
+            from { box-shadow: 0 0 20px rgba(0, 212, 255, 0.3); }
+            to { box-shadow: 0 0 30px rgba(0, 212, 255, 0.6); }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .glass {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .glass-dark {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            background: rgba(11, 20, 38, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .glass-light {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .hero-bg {
+            background: linear-gradient(135deg, #0B1426 0%, #1A2332 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .particle-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #00D4FF 0%, #4DFFFF 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hover-lift {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.2);
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #00D4FF, #4DFFFF);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .theme-toggle {
+            transition: all 0.3s ease;
+        }
+        
+        .theme-toggle:hover {
+            transform: rotate(180deg);
+        }
+        
+        .lang-dropdown {
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+        
+        .lang-dropdown.active {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: all;
+        }
+        
+        .feature-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+        
+        .feature-card:hover {
+            transform: rotateX(5deg) rotateY(5deg) scale(1.05);
+        }
+        
+        .stats-counter {
+            font-variant-numeric: tabular-nums;
+        }
+        
+        .page-transition {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #00D4FF 0%, #4DFFFF 100%);
+            z-index: 9999;
+            transform: translateX(-100%);
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .page-transition.active {
+            transform: translateX(0);
+        }
+        
+        [data-theme="light"] {
+            --bg-primary: #f8fafc;
+            --bg-secondary: #f1f5f9;
+            --text-primary: #334155;
+            --text-secondary: #64748b;
+            --glass-bg: rgba(255, 255, 255, 0.9);
+            --glass-border: rgba(0, 0, 0, 0.05);
+        }
+        
+        [data-theme="dark"] {
+            --bg-primary: #0B1426;
+            --bg-secondary: #1A2332;
+            --text-primary: #ffffff;
+            --text-secondary: #cbd5e1;
+            --glass-bg: rgba(0, 212, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+        
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .splide__slide {
+            padding: 0.5rem;
+        }
+
+        .splide__arrow {
+            background: rgba(0, 212, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .splide__arrow:hover {
+            background: rgba(0, 212, 255, 0.3);
+        }
+    </style>
+</head>
+<body class="font-inter">
+    <!-- Page Transition -->
+    <div class="page-transition" id="pageTransition"></div>
+    
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 glass-dark" id="navbar">
+        <div class="max-w-6xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-electric to-cyan flex items-center justify-center">
+                        <span class="text-white font-bold text-lg">S</span>
+                    </div>
+                    <span class="text-xl font-bold gradient-text">Project Sleep</span>
+                </div>
+                
+                <!-- Navigation Links -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="nav-link text-sm font-medium hover:text-electric" data-translate="nav.home">Home</a>
+                    <a href="features.html" class="nav-link text-sm font-medium hover:text-electric" data-translate="nav.features">Features</a>
+                    <a href="download.html" class="nav-link text-sm font-medium hover:text-electric" data-translate="nav.download">Download</a>
+                    <a href="#community" class="nav-link text-sm font-medium hover:text-electric" data-translate="nav.community">Community</a>
+                    <a href="about.html" class="nav-link text-sm font-medium hover:text-electric" data-translate="nav.about">About</a>
+                </div>
+                
+                <!-- Right Side Controls -->
+                <div class="flex items-center space-x-4">
+                    <!-- Language Selector -->
+                    <div class="relative">
+                        <button class="theme-toggle w-10 h-10 rounded-lg glass hover:glass-light flex items-center justify-center" id="langToggle">
+                            <span class="text-sm">🌐</span>
+                        </button>
+                        <div class="lang-dropdown absolute top-12 right-0 w-48 glass-dark rounded-lg p-2" id="langDropdown">
+                            <div class="grid grid-cols-2 gap-1">
+                                <button class="lang-option p-2 text-xs rounded hover:glass-light" data-lang="en">English</button>
+                                <button class="lang-option p-2 text-xs rounded hover:glass-light" data-lang="id">Indonesia</button>
+                                <button class="lang-option p-2 text-xs rounded hover:glass-light" data-lang="ru">Русский</button>
+                                <button class="lang-option p-2 text-xs rounded hover:glass-light" data-lang="zh">中文</button>
+                                <button class="lang-option p-2 text-xs rounded hover:glass-light" data-lang="hi">हिन्दी</button>
+                                <button class="lang-option p-2 text-xs rounded hover:glass-light" data-lang="ja">日本語</button>
+                                <button class="lang-option p-2 text-xs rounded hover:glass-light" data-lang="ka">ქართული</button>
+                                <button class="lang-option p-2 text-xs rounded hover:glass-light" data-lang="ar">العربية</button>
+                                <button class="lang-option p-2 text-xs rounded hover:glass-light" data-lang="jv">Jawa</button>
+                                <button class="lang-option p-2 text-xs rounded hover:glass-light" data-lang="th">ไทย</button>
+                                <button class="lang-option p-2 text-xs rounded hover:glass-light" data-lang="vi">Tiếng Việt</button>
+                                <button class="lang-option p-2 text-xs rounded hover:glass-light" data-lang="es">Español</button>
+                                <button class="lang-option p-2 text-xs rounded hover:glass-light" data-lang="pt">Português</button>
+                                <button class="lang-option p-2 text-xs rounded hover:glass-light" data-lang="de">Deutsch</button>
+                                <button class="lang-option p-2 text-xs rounded hover:glass-light" data-lang="ko">한국어</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Theme Toggle -->
+                    <button class="theme-toggle w-10 h-10 rounded-lg glass hover:glass-light flex items-center justify-center" id="themeToggle">
+                        <span class="text-sm" id="themeIcon">🌙</span>
+                    </button>
+                    
+                    <!-- Mobile Menu -->
+                    <button class="md:hidden w-10 h-10 rounded-lg glass hover:glass-light flex items-center justify-center" id="mobileMenuToggle">
+                        <span class="text-sm">☰</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div class="md:hidden mt-4 pb-4 hidden" id="mobileMenu">
+                <div class="flex flex-col space-y-3">
+                    <a href="#home" class="nav-link text-sm font-medium hover:text-electric" data-translate="nav.home">Home</a>
+                    <a href="features.html" class="nav-link text-sm font-medium hover:text-electric" data-translate="nav.features">Features</a>
+                    <a href="download.html" class="nav-link text-sm font-medium hover:text-electric" data-translate="nav.download">Download</a>
+                    <a href="#community" class="nav-link text-sm font-medium hover:text-electric" data-translate="nav.community">Community</a>
+                    <a href="about.html" class="nav-link text-sm font-medium hover:text-electric" data-translate="nav.about">About</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section id="home" class="hero-bg min-h-screen flex items-center justify-center relative">
+        <canvas class="particle-canvas" id="particleCanvas"></canvas>
+        
+        <div class="hero-content max-w-6xl mx-auto px-6 text-center">
+            <div class="mb-8">
+                <h1 class="text-5xl md:text-7xl font-bold mb-6">
+                    <span class="gradient-text" id="heroTitle">Project Sleep</span>
+                </h1>
+                <div class="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
+                    <span id="heroSubtitle"></span>
+                </div>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+                <button class="px-8 py-4 bg-gradient-to-r from-electric to-cyan rounded-lg font-semibold text-white hover-lift glow-animation" onclick="navigateTo('download.html')">
+                    <span data-translate="hero.download">Download SleepOS</span>
+                </button>
+                <button class="px-8 py-4 glass-dark rounded-lg font-semibold text-white hover-lift" onclick="navigateTo('features.html')">
+                    <span data-translate="hero.explore">Explore Features</span>
+                </button>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+                <div class="glass-dark rounded-lg p-6 hover-lift">
+                    <div class="text-3xl font-bold gradient-text mb-2 stats-counter" data-target="50000">0</div>
+                    <div class="text-sm text-gray-400" data-translate="stats.users">Active Users</div>
+                </div>
+                <div class="glass-dark rounded-lg p-6 hover-lift">
+                    <div class="text-3xl font-bold gradient-text mb-2 stats-counter" data-target="150">0</div>
+                    <div class="text-sm text-gray-400" data-translate="stats.devices">Supported Devices</div>
+                </div>
+                <div class="glass-dark rounded-lg p-6 hover-lift">
+                    <div class="text-3xl font-bold gradient-text mb-2 stats-counter" data-target="99">0</div>
+                    <div class="text-sm text-gray-400" data-translate="stats.stability">Stability Score</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Features Preview -->
+    <section class="py-20 px-6">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 gradient-text" data-translate="features.title">Core Features</h2>
+                <p class="text-xl text-gray-400 max-w-3xl mx-auto" data-translate="features.subtitle">
+                    Experience the next generation of Android customization with our cutting-edge features and optimizations.
+                </p>
+            </div>
+            
+            <div class="splide" id="featuresSlider">
+                <div class="splide__track">
+                    <ul class="splide__list">
+                        <li class="splide__slide">
+                            <div class="feature-card glass-dark rounded-xl p-6 hover-lift h-full flex flex-col">
+                                <div class="w-12 h-12 bg-gradient-to-br from-electric to-cyan rounded-lg flex items-center justify-center mb-4">
+                                    <span class="text-white text-xl">⚡</span>
+                                </div>
+                                <h3 class="text-xl font-semibold mb-3" data-translate="features.sleepos">SleepOS</h3>
+                                <p class="text-gray-400 text-sm mb-4 flex-grow" data-translate="features.sleepos.desc">
+                                    Custom ROM based on HyperOS with enhanced performance and battery optimization.
+                                </p>
+                                <button class="text-electric hover:text-cyan text-sm font-medium mt-auto text-left" onclick="navigateTo('features.html')">
+                                    <span data-translate="features.learn">Learn More</span> →
+                                </button>
+                            </div>
+                        </li>
+                        <li class="splide__slide">
+                            <div class="feature-card glass-dark rounded-xl p-6 hover-lift h-full flex flex-col">
+                                <div class="w-12 h-12 bg-gradient-to-br from-electric to-cyan rounded-lg flex items-center justify-center mb-4">
+                                    <span class="text-white text-xl">🔧</span>
+                                </div>
+                                <h3 class="text-xl font-semibold mb-3" data-translate="features.aosp">AOSP Builds</h3>
+                                <p class="text-gray-400 text-sm mb-4 flex-grow" data-translate="features.aosp.desc">
+                                    Pure Android experience with latest AOSP sources and minimal bloatware.
+                                </p>
+                                <button class="text-electric hover:text-cyan text-sm font-medium mt-auto text-left" onclick="navigateTo('features.html')">
+                                    <span data-translate="features.learn">Learn More</span> →
+                                </button>
+                            </div>
+                        </li>
+                        <li class="splide__slide">
+                            <div class="feature-card glass-dark rounded-xl p-6 hover-lift h-full flex flex-col">
+                                <div class="w-12 h-12 bg-gradient-to-br from-electric to-cyan rounded-lg flex items-center justify-center mb-4">
+                                    <span class="text-white text-xl">🎨</span>
+                                </div>
+                                <h3 class="text-xl font-semibold mb-3" data-translate="features.hyperos">HyperOS Mods</h3>
+                                <p class="text-gray-400 text-sm mb-4 flex-grow" data-translate="features.hyperos.desc">
+                                    Enhanced HyperOS with additional customization options and performance tweaks.
+                                </p>
+                                <button class="text-electric hover:text-cyan text-sm font-medium mt-auto text-left" onclick="navigateTo('features.html')">
+                                    <span data-translate="features.learn">Learn More</span> →
+                                </button>
+                            </div>
+                        </li>
+                        <li class="splide__slide">
+                            <div class="feature-card glass-dark rounded-xl p-6 hover-lift h-full flex flex-col">
+                                <div class="w-12 h-12 bg-gradient-to-br from-electric to-cyan rounded-lg flex items-center justify-center mb-4">
+                                    <span class="text-white text-xl">📱</span>
+                                </div>
+                                <h3 class="text-xl font-semibold mb-3">Port ROM</h3>
+                                <p class="text-gray-400 text-sm mb-4 flex-grow">
+                                    Nikmati pengalaman OS dari perangkat lain, kami portingkan ROM yang stabil dan kaya fitur untuk perangkat Anda.
+                                </p>
+                                <button class="text-electric hover:text-cyan text-sm font-medium mt-auto text-left" onclick="navigateTo('features.html')">
+                                    <span data-translate="features.learn">Learn More</span> →
+                                </button>
+                            </div>
+                        </li>
+                        <li class="splide__slide">
+                            <div class="feature-card glass-dark rounded-xl p-6 hover-lift h-full flex flex-col">
+                                <div class="w-12 h-12 bg-gradient-to-br from-electric to-cyan rounded-lg flex items-center justify-center mb-4">
+                                    <span class="text-white text-xl">🚀</span>
+                                </div>
+                                <h3 class="text-xl font-semibold mb-3" data-translate="features.performance">Performance</h3>
+                                <p class="text-gray-400 text-sm mb-4 flex-grow" data-translate="features.performance.desc">
+                                    Advanced kernel optimizations and system tweaks for maximum performance.
+                                </p>
+                                <button class="text-electric hover:text-cyan text-sm font-medium mt-auto text-left" onclick="navigateTo('features.html')">
+                                    <span data-translate="features.learn">Learn More</span> →
+                                </button>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- SleepOS Preview -->
+    <section class="py-20 px-6 bg-gradient-to-r from-navy to-slate">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-4xl md:text-5xl font-bold mb-6 gradient-text" data-translate="preview.title">
+                        SleepOS Interface
+                    </h2>
+                    <p class="text-xl text-gray-300 mb-8" data-translate="preview.description">
+                        Experience a revolutionary interface that combines the best of HyperOS with advanced customization options, 
+                        glassmorphism design elements, and performance optimizations that redefine your Android experience.
+                    </p>
+                    
+                    <div class="space-y-4 mb-8">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-2 h-2 bg-electric rounded-full"></div>
+                            <span class="text-gray-300" data-translate="preview.feature1">Glassmorphism UI Design</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="w-2 h-2 bg-electric rounded-full"></div>
+                            <span class="text-gray-300" data-translate="preview.feature2">Advanced Customization</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="w-2 h-2 bg-electric rounded-full"></div>
+                            <span class="text-gray-300" data-translate="preview.feature3">Performance Optimizations</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="w-2 h-2 bg-electric rounded-full"></div>
+                            <span class="text-gray-300" data-translate="preview.feature4">Battery Enhancements</span>
+                        </div>
+                    </div>
+                    
+                    <button class="px-8 py-4 bg-gradient-to-r from-electric to-cyan rounded-lg font-semibold text-white hover-lift" onclick="navigateTo('download.html')">
+                        <span data-translate="preview.download">Try SleepOS Now</span>
+                    </button>
+                </div>
+                
+                <div class="relative">
+                    <div class="glass-dark rounded-2xl p-8 hover-lift">
+                        <img src="resources/sleepos-preview.jpg" alt="SleepOS Interface Preview" class="w-full rounded-lg shadow-2xl">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Community Section -->
+    <section id="community" class="py-20 px-6">
+        <div class="max-w-6xl mx-auto text-center">
+            <h2 class="text-4xl md:text-5xl font-bold mb-6 gradient-text" data-translate="community.title">
+                Join Our Community
+            </h2>
+            <p class="text-xl text-gray-400 mb-12 max-w-3xl mx-auto" data-translate="community.description">
+                Connect with thousands of developers and enthusiasts in our active community. 
+                Share ideas, get support, and contribute to the future of Project Sleep.
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+                <div class="glass-dark rounded-xl p-8 hover-lift">
+                    <div class="w-16 h-16 bg-gradient-to-br from-electric to-cyan rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-white text-2xl">💬</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3" data-translate="community.discord">Discord Server</h3>
+                    <p class="text-gray-400 text-sm mb-4" data-translate="community.discord.desc">
+                        Real-time chat with developers and get instant support.
+                    </p>
+                    <button class="text-electric hover:text-cyan font-medium" onclick="openCommunity('discord')">
+                        <span data-translate="community.join">Join Discord</span> →
+                    </button>
+                </div>
+                
+                <div class="glass-dark rounded-xl p-8 hover-lift">
+                    <div class="w-16 h-16 bg-gradient-to-br from-electric to-cyan rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-white text-2xl">📱</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3" data-translate="community.telegram">Telegram Group</h3>
+                    <p class="text-gray-400 text-sm mb-4" data-translate="community.telegram.desc">
+                        Stay updated with latest releases and announcements.
+                    </p>
+                    <button class="text-electric hover:text-cyan font-medium" onclick="openCommunity('telegram')">
+                        <span data-translate="community.join">Join Telegram</span> →
+                    </button>
+                </div>
+                
+                <div class="glass-dark rounded-xl p-8 hover-lift">
+                    <div class="w-16 h-16 bg-gradient-to-br from-electric to-cyan rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-white text-2xl">🌐</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3" data-translate="community.forum">Community Forum</h3>
+                    <p class="text-gray-400 text-sm mb-4" data-translate="community.forum.desc">
+                        In-depth discussions and detailed guides.
+                    </p>
+                    <button class="text-electric hover:text-cyan font-medium" onclick="openCommunity('forum')">
+                        <span data-translate="community.visit">Visit Forum</span> →
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="py-12 px-6 glass-dark">
+        <div class="max-w-6xl mx-auto text-center">
+            <div class="flex items-center justify-center space-x-3 mb-6">
+                <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-electric to-cyan flex items-center justify-center">
+                    <span class="text-white font-bold text-lg">S</span>
+                </div>
+                <span class="text-2xl font-bold gradient-text">Project Sleep</span>
+            </div>
+            
+            <p class="text-gray-400 mb-6" data-translate="footer.description">
+                Advanced custom ROM development for the future of Android.
+            </p>
+            
+            <div class="flex justify-center space-x-6 mb-6">
+                <a href="#" class="text-gray-400 hover:text-electric transition-colors" data-translate="footer.privacy">Privacy Policy</a>
+                <a href="#" class="text-gray-400 hover:text-electric transition-colors" data-translate="footer.terms">Terms of Service</a>
+                <a href="#" class="text-gray-400 hover:text-electric transition-colors" data-translate="footer.contact">Contact Us</a>
+            </div>
+            
+            <p class="text-sm text-gray-500" data-translate="footer.copyright">
+                © 2024 Project Sleep. All rights reserved.
+            </p>
+        </div>
+    </footer>
+    
+    <script src="main.js"></script>
+</body>
+</html>
