@@ -266,14 +266,14 @@
                     <div>
                         <label class="block text-sm font-medium mb-2">Manufacturer</label>
                         <select id="manufacturerFilter" class="w-full px-4 py-3 glass rounded-lg border border-gray-700 focus:border-electric focus:outline-none text-white">
-                            <option value="">All Manufacturers</option>
-                            <option value="xiaomi">Xiaomi</option>
-                            <option value="samsung">Samsung</option>
-                            <option value="oneplus">OnePlus</option>
-                            <option value="google">Google</option>
-                            <option value="realme">Realme</option>
-                            <option value="oppo">OPPO</option>
-                            <option value="vivo">Vivo</option>
+                           <option value="all" class="text-black">All Manufacturers</option>
+                           <option value="xiaomi" class="text-black">Xiaomi</option>
+                           <option value="samsung" class="text-black">Samsung</option>
+                           <option value="oneplus" class="text-black">OnePlus</option>
+                           <option value="google" class="text-black">Google</option>
+                           <option value="realme" class="text-black">Realme</option>
+                           <option value="oppo" class="text-black">Oppo</option>
+                           <option value="vivo" class="text-black">Vivo</option>
                         </select>
                     </div>
                     
@@ -281,10 +281,11 @@
                     <div>
                         <label class="block text-sm font-medium mb-2">ROM Type</label>
                         <select id="romTypeFilter" class="w-full px-4 py-3 glass rounded-lg border border-gray-700 focus:border-electric focus:outline-none text-white">
-                            <option value="">All Types</option>
-                            <option value="sleepos">SleepOS</option>
-                            <option value="aosp">AOSP</option>
-                            <option value="hyperos">HyperOS Mod</option>
+                            <option value="all" class="text-black">All Types</option>
+                            <option value="sleepos" class="text-black">SleepOS</option>
+                            <option value="aosp" class="text-black">AOSP</option>
+                            <option value="port" class="text-black">PORT</option>
+                            <option value="hyperos" class="text-black">HyperOS Mod</option>
                         </select>
                     </div>
                 </div>
@@ -499,7 +500,7 @@
                 model: "Pixel 7 Pro",
                 codename: "cheetah",
                 maintainer: "@pixelteam",
-                romTypes: ["sleepos", "aosp"],
+                romTypes: ["port"],
                 image: "resources/hyperos-mod.jpg",
                 versions: [
                     { type: "Stable", version: "v2.1.0", size: "1.0GB", date: "2024-01-14", mirror: "#" }
